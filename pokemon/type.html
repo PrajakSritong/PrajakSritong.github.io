@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pokémon by Type</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-r from-yellow-200 via-orange-200 to-red-200 min-h-screen">
+    <div class="container mx-auto p-4">
+        <h1 class="text-5xl font-extrabold text-center text-white mb-12 bg-gradient-to-r from-orange-500 to-red-500 p-4 rounded-3xl shadow-2xl">
+            Pokémon Type
+        </h1>
+        <div id="pokemon-type" class="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 mb-6">
+        </div>
+        <div class="flex justify-between items-center">
+            <button id="prev" class="bg-red-500 text-white p-2 rounded-lg shadow-md hover:bg-red-600 disabled:opacity-50" disabled>Previous</button>
+            <button id="next" class="bg-red-500 text-white p-2 rounded-lg shadow-md hover:bg-red-600">Next</button>
+        </div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const typeName = urlParams.get('name');
+        const limit = 36; // Number of Pokémon per page
+        let offset = 0; // Start from the first page
+
+        function fetchPokemonsByType(type, offset, limit) {
+            return fetch(`https://pokeapi.co/api/v2/type/${type}`)
+                .then(response => response.json())
+                .then(data => {
+                    const pokemons = data.pokemon.slice(offset, offset + limit);
+                    return {
+                        pokemons: pokemons.map(pokemonInfo => pokemonInfo.pokemon),
+                        total: data.pokemon.length
+                    };
+                });
+        }
+
+        function fetchPokemonData(url) {
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => ({
+                    id: data.id,
+                    name: data.name,
+                    image: data.sprites.other['official-artwork'].front_default
+                }));
+        }
+
+        function updatePage() {
+            fetchPokemonsByType(typeName, offset, limit)
+                .then(async ({ pokemons, total }) => {
+                    const container = document.getElementById("pokemon-type");
+                    container.innerHTML = ''; // Clear existing Pokémon
+
+                    for (const pokemon of pokemons) {
+                        const pokemonData = await fetchPokemonData(pokemon.url);
+                        container.innerHTML += `
+                            <a href="detail.html?id=${pokemonData.id}" class="bg-white p-4 rounded-3xl text-center border border-pink-300 shadow-lg hover:bg-pink-500 text-orange-500 hover:text-white transition duration-300 ease-in-out">
+                                <img src='${pokemonData.image}' alt='${pokemonData.name}' class='mx-auto w-32 h-32 object-contain mb-2' />
+                                <div class='text-lg font-semibold mt-2'>${pokemonData.name}</div>
+                            </a>
+                        `;
+                    }
+
+                    // Update pagination controls
+                    document.getElementById('prev').disabled = offset === 0;
+                    document.getElementById('next').disabled = offset + limit >= total;
+                })
+                .catch(err => console.error(err));
+        }
+
+        // Event listeners for pagination buttons
+        document.getElementById('prev').addEventListener('click', () => {
+            if (offset > 0) {
+                offset -= limit;
+                updatePage();
+            }
+        });
+
+        document.getElementById('next').addEventListener('click', () => {
+            offset += limit;
+            updatePage();
+        });
+
+        // Initial page load
+        updatePage();
+    </script>
+</body>
+
+</html>
