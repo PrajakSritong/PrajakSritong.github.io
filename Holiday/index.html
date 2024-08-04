@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body class="bg-green-400 flex items-center justify-center h-screen">
+    <div class="bg-blue-200 p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold mb-4 text-center">Weather App</h1>
+        <form id="weather-form" class="mb-4">
+            <select id="province-select" class="w-full p-2 border border-gray-300 rounded mb-4">
+                <option value="" disabled selected>Select a province</option>
+                <option value="Bangkok">Bangkok</option>
+                <option value="Chiang Mai">Chiang Mai</option>
+                <option value="Chiang Rai">Chiang Rai</option>
+                <option value="Khon Kaen">Khon Kaen</option>
+                <option value="Nakhon Pathom">Nakhon Pathom</option>
+                <option value="Nakhon Ratchasima">Nakhon Ratchasima</option>
+                <option value="Nakhon Si Thammarat">Nakhon Si Thammarat</option>
+                <option value="Phuket">Phuket</option>
+                <option value="Songkhla">Songkhla</option>
+                <option value="Ubon Ratchathani">Ubon Ratchathani</option>
+                <option value="Amnat Charoen">Amnat Charoen</option>
+                <option value="Ang Thong">Ang Thong</option>
+                <option value="Buriram">Buriram</option>
+                <option value="Chachoengsao">Chachoengsao</option>
+                <option value="Chai Nat">Chai Nat</option>
+                <option value="Chaiyaphum">Chaiyaphum</option>
+                <option value="Chanthaburi">Chanthaburi</option>
+                <option value="Chonburi">Chonburi</option>
+                <option value="Chumphon">Chumphon</option>
+                <option value="Kalasin">Kalasin</option>
+                <option value="Kanchanaburi">Kanchanaburi</option>
+                <option value="Korat">Nakhon Ratchasima</option>
+                <option value="Krachi">Krachi</option>
+                <option value="Lampang">Lampang</option>
+                <option value="Lamphun">Lamphun</option>
+                <option value="Loei">Loei</option>
+                <option value="Lopburi">Lopburi</option>
+                <option value="Mae Hong Son">Mae Hong Son</option>
+                <option value="Maha Sarakham">Maha Sarakham</option>
+                <option value="Mukdahan">Mukdahan</option>
+                <option value="Nakhon Nayok">Nakhon Nayok</option>
+                <option value="Nakhon Phanom">Nakhon Phanom</option>
+                <option value="Nakhon Sawan">Nakhon Sawan</option>
+                <option value="Nan">Nan</option>
+                <option value="Narathiwat">Narathiwat</option>
+                <option value="Nong Bua Lamphu">Nong Bua Lamphu</option>
+                <option value="Nong Khai">Nong Khai</option>
+                <option value="Pattani">Pattani</option>
+                <option value="Phetchabun">Phetchabun</option>
+                <option value="Phetchaya">Phetchaya</option>
+                <option value="Phichit">Phichit</option>
+                <option value="Phitsanulok">Phitsanulok</option>
+                <option value="Phra Nakhon Si Ayutthaya">Phra Nakhon Si Ayutthaya</option>
+                <option value="Phrae">Phrae</option>
+                <option value="Phuket">Phuket</option>
+                <option value="Pitsanulok">Pitsanulok</option>
+                <option value="Ratchaburi">Ratchaburi</option>
+                <option value="Rayong">Rayong</option>
+                <option value="Roi Et">Roi Et</option>
+                <option value="Sa Kaeo">Sa Kaeo</option>
+                <option value="Sakon Nakhon">Sakon Nakhon</option>
+                <option value="Samut Prakan">Samut Prakan</option>
+                <option value="Samut Sakhon">Samut Sakhon</option>
+                <option value="Samut Songkhram">Samut Songkhram</option>
+                <option value="Saraburi">Saraburi</option>
+                <option value="Satun">Satun</option>
+                <option value="Singburi">Singburi</option>
+                <option value="Sisaket">Sisaket</option>
+                <option value="Songkhla">Songkhla</option>
+                <option value="Sukhothai">Sukhothai</option>
+                <option value="Suphan Buri">Suphan Buri</option>
+                <option value="Surat Thani">Surat Thani</option>
+                <option value="Surin">Surin</option>
+                <option value="Tak">Tak</option>
+                <option value="Trang">Trang</option>
+                <option value="Trat">Trat</option>
+                <option value="Udon Thani">Udon Thani</option>
+                <option value="Uthai Thani">Uthai Thani</option>
+                <option value="Uttaradit">Uttaradit</option>
+                <option value="Yala">Yala</option>
+                <option value="Yasothon">Yasothon</option>
+
+            </select>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Get Weather</button>
+        </form>
+        <div id="weather-info" class="hidden">
+            <h2 class="text-xl font-semibold mb-2">Weather in <span id="city-name"></span></h2>
+            <p><i class="fas fa-thermometer-half"></i> Temperature: <span id="temperature"></span> °C</p>
+            <p><i class="fas fa-tint"></i> Humidity: <span id="humidity"></span> %</p>
+            <p><i class="fas fa-wind"></i> Wind Speed: <span id="wind-speed"></span> m/s</p>
+        </div>
+        <div id="error-message" class="text-red-500 hidden"></div>
+    </div>
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const province = document.getElementById('province-select').value;
+            const apiKey = 'c73453f131e33e6f34293f0435b00d2b';
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${province},TH&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cod === 200) {
+                        document.getElementById('city-name').innerText = data.name;
+                        document.getElementById('temperature').innerText = data.main.temp;
+                        document.getElementById('humidity').innerText = data.main.humidity;
+                        document.getElementById('wind-speed').innerText = data.wind.speed;
+
+                        document.getElementById('weather-info').classList.remove('hidden');
+                        document.getElementById('error-message').classList.add('hidden');
+                    } else {
+                        document.getElementById('error-message').innerText = `Error: ${data.message}`;
+                        document.getElementById('error-message').classList.remove('hidden');
+                        document.getElementById('weather-info').classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    document.getElementById('error-message').innerText = 'Error fetching weather data. Please try again later.';
+                    document.getElementById('error-message').classList.remove('hidden');
+                    document.getElementById('weather-info').classList.add('hidden');
+                });
+        });
+    </script>
+</body>
+
+</html>
